@@ -1,0 +1,40 @@
+name: Auto Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  status:
+
+jobs:
+  automerge:
+    if: github.actor == 'exercism-solutions-syncer'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Merge PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+
+            const checks = await github.rest.checks.listForRef({
+              owner,
+              repo,
+              ref: context.payload.pull_request.head.sha,
+            });
+
+            const allChecksPassed = checks.data.check_runs.every(
+              (check) => check.conclusion === 'success'
+            );
+
+            if (allChecksPassed) {
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: prNumber,
+                merge_method: 'squash', 
+              });
+              console.log(`Pull Request #${prNumber} merged successfully.`);
+            } else {
+              console.log(`Pull Request #${prNumber} not ready for merge.`);
+            }
