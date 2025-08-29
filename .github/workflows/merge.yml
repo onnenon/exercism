@@ -7,7 +7,7 @@ on:
 
 jobs:
   automerge:
-    if: github.actor == 'exercism-solutions-syncer'
+    if: github.actor == 'exercism-solutions-syncer[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Auto Merge PR
