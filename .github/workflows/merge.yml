@@ -24,6 +24,6 @@ jobs:
               owner,
               repo,
               pull_number: prNumber,
-              merge_method: 'squash', 
+              merge_method: 'merge', 
             });
             console.log(`Pull Request #${prNumber} merged successfully.`);
