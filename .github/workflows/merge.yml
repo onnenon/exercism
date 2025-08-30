@@ -5,6 +5,8 @@ on:
     types: [opened, synchronize, reopened]
   status:
 
+permissions:
+  contents: write
 jobs:
   automerge:
     if: github.actor == 'exercism-solutions-syncer[bot]'
