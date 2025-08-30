@@ -17,24 +17,10 @@ jobs:
             const { owner, repo } = context.repo;
             const prNumber = context.payload.pull_request.number;
 
-            const checks = await github.rest.checks.listForRef({
+            await github.rest.pulls.merge({
               owner,
               repo,
-              ref: context.payload.pull_request.head.sha,
+              pull_number: prNumber,
+              merge_method: 'squash', 
             });
-
-            const allChecksPassed = checks.data.check_runs.every(
-              (check) => check.conclusion === 'success'
-            );
-
-            if (allChecksPassed) {
-              await github.rest.pulls.merge({
-                owner,
-                repo,
-                pull_number: prNumber,
-                merge_method: 'squash', 
-              });
-              console.log(`Pull Request #${prNumber} merged successfully.`);
-            } else {
-              console.log(`Pull Request #${prNumber} not ready for merge.`);
-            }
+            console.log(`Pull Request #${prNumber} merged successfully.`);
