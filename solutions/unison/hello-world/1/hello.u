@@ -1,0 +1,4 @@
+use base Text
+
+hello.hello : Text
+hello.hello = "Hello, World!"
